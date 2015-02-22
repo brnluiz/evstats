@@ -1,4 +1,5 @@
 <link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-progress/paper-progress.html">
 <script src="bower_components/chartjs/Chart.js"></script>
 
 <polymer-element name="stats-box-gender" attributes="width height values colors labels">
@@ -25,8 +26,9 @@
         margin-top: 2rem;
         margin-bottom: 2rem;
       }
-      div {
+      paper-progress, article {
         text-align: center;
+        margin-top: 3rem;
       }
       h2 {
         font-weight: 300;
@@ -38,7 +40,9 @@
         margin: 2rem auto 0;
       }
     </style>
-    <div vertical layout hidden?="{{!loaded}}">
+    <paper-progress indeterminate hidden?="{{!loading}}"></paper-progress>
+
+    <article vertical layout hidden?="{{!loaded}}">
       <h2 id='statName'>{{statName}}</h2>
       <canvas id="canvas" width="{{width}}" height="{{height}}" center></canvas>
       <div id="legend" horizontal layout end>
@@ -46,23 +50,30 @@
         <div flex><div class="colorBox" style="background: {{colors[1]}}"></div>{{labels[1]}}: {{values[1]}}</div>
         <div flex><div class="colorBox" style="background: {{colors[2]}}"></div>{{labels[2]}}: {{values[2]}}</div>
       </div>
-    </div>
+    </article>
   </template>
 
   <script>
     Polymer('stats-box-gender', {
       loaded: false,
+      loading: false,
       colors: ['#517AE6', '#E66C51', '#3D414D'],
       labels: ['Men', 'Women', 'Other'],
       values: [20, 30, 40],
-      statName: "Hello World",
-      ready: function() {
-        console.log(this.values);
+      data : {
+        colors: this.colors,
+        vales: this.values,
+        labels: this.labels
       },
-      updateChart: function(genders) {
+      statName: "Hello World",
+      setChartData: function (colors, labels, values) {
+
+      },
+      updateChart: function (genders) {
         var objIdx = 0, tempValues = [];
 
         this.loaded = false;
+        this.loading = false;
 
         // Convert the genders object to values compatible
         Object.keys(genders).forEach(function (prop){
