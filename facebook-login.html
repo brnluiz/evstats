@@ -1,0 +1,61 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/paper-progress/paper-progress.html">
+
+<polymer-element name="facebook-login" attributes="">
+  <template>
+    <style>
+
+    </style>
+    <div hidden?='{{loggedIn}}' >
+      <paper-progress indeterminate hidden?='{{!loading}}'></paper-progress>
+      <div vertical layout hidden?='{{loading}}'>
+        <paper-button id='loginBtn' on-tap='{{ loginFb }}' raised center>Facebook Login</paper-button>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer('facebook-login', {
+      loggedIn: false,
+      loading: false,
+      loginFb: function () {
+        var self = this;
+
+        FB.login(function (response) {
+          if (response.authResponse) {
+            console.log('Logged in');
+            self.fire('loggedIn', {msg: 'Logged in!'});
+            self.loggedIn = true;
+            return true;
+          }
+
+          self.fire('loginError', {msg: 'User cancelled login or did not fully authorize.'});
+        });
+      },
+      checkStatus: function () {
+        var self = this;
+
+        FB.getLoginStatus(function(response) {
+          console.log(response);
+
+          if (response.status === 'connected') {
+            self.fire('loggedIn', {msg: 'Logged in!'});
+            self.loggedIn = true;
+            var uid = response.authResponse.userID;
+            var accessToken = response.authResponse.accessToken;
+          } else if (response.status === 'not_authorized') {
+            // the user is logged in to Facebook,
+            // but has not authenticated your app
+            self.fire('loginError', {msg: 'User cancelled login or did not fully authorize.'});
+          } else {
+            // the user isn't logged in to Facebook.
+            self.fire('loginError', {msg: 'User cancelled login or did not fully authorize.'});
+          }
+
+          self.loading = false;
+        });
+      }
+    });
+  </script>
+</polymer-element>

@@ -8,14 +8,14 @@ var EventStats = function () {
   this.rsvp           = { attending: 0, declined: 0, maybe: 0 };
   this.total          =  0;
   this.totalInvited   =  0;
-  this.title          = "";
+  this.name          = "";
 
   this.reset = function () {
     this.genders        = { male: 0, female: 0, other: 0 };
     this.rsvp           = { attending: 0, declined: 0, maybe: 0 };
     this.total          =  0;
     this.totalInvited   =  0;
-    this.title          = "";
+    this.name           = "";
   }
 };
 
@@ -31,10 +31,20 @@ var ChartBox = function (boxId) {
   this.setLoading = function (status) {
     this.element.loading = status;
   }
+  this.setName = function (name) {
+    this.element.chartName = name;
+  }
   this.updateChart = function (data) {
+    var values = [];
+    var objIdx = 0;
     this.setLoading(false);
-    this.element.statName = data.title;
-    this.element.updateChart(data.genders);
+
+    Object.keys(data).forEach(function (prop){
+      values[objIdx++] = data[prop];
+    });
+
+    this.element.values = values;
+    this.element.updateChart(data);
   }
 }
 
@@ -48,6 +58,9 @@ window.fbAsyncInit = function() {
     cookies: true,
     version: 'v2.2'
   });
+  // var element = document.querySelector('facebook-login');
+  // console.log(element);
+  // element.checkStatus();
 };
 //
 // (function(d, s, id){
@@ -81,7 +94,6 @@ function countGender(userList) {
   });
   queryStr = queryStr.substring(1);
 
-  console.log('?ids='+queryStr+'&fields=gender');
   FB.api('?ids='+queryStr+'&fields=gender', function (response) {
 
     attendingIds.forEach(function (value, index) {
@@ -95,11 +107,14 @@ function countGender(userList) {
       }
     });
 
-    chartGender.updateChart(eventStats);
+    chartGender.updateChart(eventStats.genders);
   });
 }
 
 function getEventStats(eventId) {
+  eventStats.reset();
+  chartGender.hide();
+  chartGender.setLoading(true);
 
   FB.login(function (response) {
     if (response.authResponse) {
@@ -117,15 +132,11 @@ function getEventStats(eventId) {
               return false;
           }
 
-          eventStats.reset();
-          chartGender.hide();
-          chartGender.setLoading(true);
-
           var eventInfo      = JSON.parse(response[0].body);
           var eventUsersList = JSON.parse(response[1].body).data;
           var eventCounts    = JSON.parse(response[2].body);
 
-          eventStats.title = eventInfo.name;
+          eventStats.name = eventInfo.name;
           eventStats.total = eventCounts.attending_count;
 
           eventStats.rsvp.attending = eventCounts.attending_count;
@@ -136,10 +147,9 @@ function getEventStats(eventId) {
           eventStats.totalInvited += eventStats.rsvp.declined;
           eventStats.totalInvited += eventStats.rsvp.maybe;
 
+          chartGender.setName(eventStats.name);
           countGender(eventUsersList);
         });
-    } else {
-      console.log('User cancelled login or did not fully authorize.');
     }
   });
 }

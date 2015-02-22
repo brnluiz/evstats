@@ -11,6 +11,7 @@
     <link rel="import" href="bower_components/paper-input/paper-input.html">
     <link rel="import" href="search-box.html">
     <link rel="import" href="stats-box-gender.html">
+    <link rel="import" href="facebook-login.html">
 
     <link href='http://fonts.googleapis.com/css?family=Lilita+One|Open+Sans:800,700,400,600,300' rel='stylesheet' type='text/css'>
 
@@ -30,7 +31,7 @@
       color: #fff;
       width: 100%;
       text-align: center;
-      padding: 1rem 0 1.5rem;
+      header: 1rem 0 1.5rem;
       margin-bottom: 1rem;
       border-bottom: 10px solid #65C0B5;
     }
@@ -75,9 +76,10 @@
       <h2>Event Statistics for Facebook</h2>
     </header>
 
+    <!-- <content center layout vertical>
+      <facebook-login></facebook-login>
+    </content> -->
     <content center layout vertical>
-      <h2>Insert the event link to receive event statistics</h2>
-
       <search-box inputLabel="Event link"
                   buttonText="Get data!" ></search-box>
       <stats-box-gender width=400
