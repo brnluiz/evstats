@@ -1,0 +1,38 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+<script src="js/main.js"></script>
+
+<polymer-element name="search-box" attributes="inputLabel buttonText">
+  <template>
+    <style>
+    :host{
+      width: 100%;
+    }
+    .input-wrapper {
+      width: 100%;
+      display: block;
+      margin-top: .75rem;
+    }
+    </style>
+
+    <div class="input-wrapper" vertical layout>
+      <paper-input id="urlInput" label="{{ inputLabel }}" value="https://www.facebook.com/events/410543919122678/?ref=25&sid_reminder=8864179321980321792" ></paper-input>
+
+      <div class="input-wrapper" horizontal layout end-justified>
+        <paper-button id='getStatsBtn' on-tap='{{ getData }}' raised >{{ buttonText }}</paper-button>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer('search-box', {
+      getData: function(e) {
+        var urlInput = this.$.urlInput.value;
+        var urlPath = getUrlPathInfo(urlInput, "events/");
+        var eventId = urlPath[0];
+
+        getEventStats(eventId);
+      }
+    });
+  </script>
+</polymer-element>

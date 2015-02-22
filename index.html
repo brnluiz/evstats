@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- 1. Load webcomponents.min.js for polyfill support. -->
+    <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
+
+    <!-- 2. Use an HTML Import to bring in the element. -->
+    <link rel="import" href="bower_components/core-toolbar/core-toolbar.html">
+    <link rel="import" href="bower_components/core-header-panel/core-header-panel.html">
+    <link rel="import" href="bower_components/core-icons/core-icons.html">
+    <link rel="import" href="bower_components/paper-input/paper-input.html">
+    <link rel="import" href="search-box.html">
+    <link rel="import" href="stats-box-gender.html">
+
+    <link href='http://fonts.googleapis.com/css?family=Lilita+One|Open+Sans:800,700,400,600,300' rel='stylesheet' type='text/css'>
+  </head>
+  <style shim-shadowdom>
+    body {
+      font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial;
+      font-size: 14px;
+      margin: 0;
+      -webkit-tap-highlight-color: rgba(0,0,0,0);
+      -webkit-touch-callout: none;
+    }
+
+    header {
+      background: #29B3A3;
+      color: #fff;
+      width: 100%;
+      text-align: center;
+      padding: 1rem 0 1.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 10px solid #65C0B5;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 300;
+      margin: 1rem 0 0;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    content {
+      padding: 0 5%;
+    }
+
+    core-header-panel {
+      background: #fff;
+    }
+    core-toolbar {
+      background-color: #03A9F4;
+      color: #fff;
+    }
+    p {
+      margin: 20px;
+      padding: 80px 20px;
+      background-color: #eee;
+    }
+
+    h2 {
+      font-weight: 300;
+    }
+
+  </style>
+  <body fullbleed layout vertical center unresolved>
+
+    <header>
+      <h1>EvStats</h1>
+      <h2>Event Statistics for Facebook</h2>
+    </header>
+
+    <content center layout vertical>
+      <h2>Insert the event link to receive event statistics</h2>
+
+      <search-box inputLabel="Event link"
+                  buttonText="Get data!" ></search-box>
+      <stats-box-gender width=400
+                        height=400></stats-box-gender>
+    </content>
+
+    <script src="http://connect.facebook.net/en_US/all.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

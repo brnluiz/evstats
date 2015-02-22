@@ -1,0 +1,81 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<script src="bower_components/chartjs/Chart.js"></script>
+
+<polymer-element name="stats-box-gender" attributes="width height values colors labels">
+  <template>
+    <style>
+      canvas {
+        margin-top: 2rem;
+      }
+      .colorBox {
+        width: 14px;
+        height: 14px;
+        background: #333;
+        display: inline-block;
+        margin-right: 5px;
+      }
+      .colorMale{background: #517AE6}
+      .colorFemale{background: #E66C51}
+      .colorOther{background: #3D414D}
+      span {
+        font-size: 16px;
+      }
+      #legend {
+        width: 100%;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+      }
+      div {
+        text-align: center;
+      }
+    </style>
+    <div vertical layout hidden?="{{!loaded}}">
+      <canvas id="canvas" width="{{width}}" height="{{height}}"></canvas>
+      <div id="legend" horizontal layout end>
+        <div flex><div class="colorBox colorMale"></div>{{labels[0]}}</div>
+        <div flex><div class="colorBox colorFemale"></div>{{labels[1]}}</div>
+        <div flex><div class="colorBox colorOther"></div>{{labels[2]}}</div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer('stats-box-gender', {
+      loaded: false,
+      colors: ['#517AE6', '#E66C51', '#3D414D'],
+      labels: ['Men', 'Women', 'Other'],
+      values: [20, 30, 40],
+      ready: function() {
+        console.log(this.values);
+      },
+      updateChart: function(genders) {
+        var objIdx = 0, tempValues = [];
+
+        // Convert the genders object to values compatible
+        Object.keys(genders).forEach(function (prop){
+          tempValues[objIdx++] = genders[prop];
+        });
+        this.values = tempValues;
+
+        // Destroys actual chart
+        if(this.chart){
+          this.chart.destroy();
+        }
+
+        // Create the data that will populate the chart
+        this.data = [];
+        this.values.forEach(function (val, i) {
+          this.data.push({
+            color: this.colors[i],
+            value: val,
+            label: this.labels[i] });
+        }, this);
+
+        // Create the chart
+        this.ctx = this.$.canvas.getContext('2d');
+        this.chart = new Chart(this.ctx).Doughnut(this.data);
+        this.loaded = true;
+      }
+    });
+  </script>
+</polymer-element>
