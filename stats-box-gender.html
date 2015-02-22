@@ -28,13 +28,23 @@
       div {
         text-align: center;
       }
+      h2 {
+        font-weight: 300;
+        font-size: 1.5rem;
+        margin-bottom: 0;
+        text-align: center;
+      }
+      canvas {
+        margin: 2rem auto 0;
+      }
     </style>
     <div vertical layout hidden?="{{!loaded}}">
-      <canvas id="canvas" width="{{width}}" height="{{height}}"></canvas>
+      <h2 id='statName'>{{statName}}</h2>
+      <canvas id="canvas" width="{{width}}" height="{{height}}" center></canvas>
       <div id="legend" horizontal layout end>
-        <div flex><div class="colorBox colorMale"></div>{{labels[0]}}</div>
-        <div flex><div class="colorBox colorFemale"></div>{{labels[1]}}</div>
-        <div flex><div class="colorBox colorOther"></div>{{labels[2]}}</div>
+        <div flex><div class="colorBox" style="background: {{colors[0]}}"></div>{{labels[0]}}: {{values[0]}}</div>
+        <div flex><div class="colorBox" style="background: {{colors[1]}}"></div>{{labels[1]}}: {{values[1]}}</div>
+        <div flex><div class="colorBox" style="background: {{colors[2]}}"></div>{{labels[2]}}: {{values[2]}}</div>
       </div>
     </div>
   </template>
@@ -45,11 +55,14 @@
       colors: ['#517AE6', '#E66C51', '#3D414D'],
       labels: ['Men', 'Women', 'Other'],
       values: [20, 30, 40],
+      statName: "Hello World",
       ready: function() {
         console.log(this.values);
       },
       updateChart: function(genders) {
         var objIdx = 0, tempValues = [];
+
+        this.loaded = false;
 
         // Convert the genders object to values compatible
         Object.keys(genders).forEach(function (prop){
@@ -74,6 +87,9 @@
         // Create the chart
         this.ctx = this.$.canvas.getContext('2d');
         this.chart = new Chart(this.ctx).Doughnut(this.data);
+
+        // Update title
+        this.$.statName.value = this.statName;
         this.loaded = true;
       }
     });

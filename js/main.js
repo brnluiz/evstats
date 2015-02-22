@@ -7,7 +7,8 @@ var eventStats = {
   genders: {
     male: 0, female: 0, other: 0
   },
-  total: 0
+  total: 0,
+  name: ""
 };
 
 FB.init({
@@ -72,16 +73,25 @@ function getEventStats(eventId) {
   FB.login(function (response) {
     if (response.authResponse) {
 
-      FB.api(eventId + '/attending', function (response) {
+      FB.api('/', 'POST', { batch: [
+          { method: 'GET', relative_url: eventId + '/', name: "eventInfo"},
+          { method: "GET", relative_url: eventId + '/attending', name: "eventAttending" }
+        ]} ,
+        function (response) {
           if (response.error) {
               console.log('[error] Event doesn\'t exists!');
               console.log(response.error);
               return false;
           }
 
-          eventStats.total = response.data.length;
-          countGender(response.data);
-      });
+          var eventInfo =       JSON.parse(response[0].body);
+          var eventAttending =  JSON.parse(response[1].body).data;
+
+          eventStats.name = eventInfo.name;
+          eventStats.total = eventAttending.length;
+
+          countGender(eventAttending);
+        });
     } else {
       console.log('User cancelled login or did not fully authorize.');
     }
@@ -89,14 +99,16 @@ function getEventStats(eventId) {
 }
 
 function updateChart() {
-  var chart = document.querySelector('stats-box-gender');
-  chart.updateChart(eventStats.genders);
+  var statsBoxGender = document.querySelector('stats-box-gender');
+  statsBoxGender.statName = eventStats.name;
+  statsBoxGender.updateChart(eventStats.genders);
 
   // Reset eventStats
   eventStats = {
     genders: {
       male: 0, female: 0, other: 0
     },
-    total: 0
+    total: 0,
+    name: ""
   };
 }
