@@ -48,7 +48,7 @@ var ChartBox = function (boxId) {
 
     this.element.values = values;
     console.log(data);
-    console.log(this.elements.values);
+    console.log(this.element.values);
     this.element.updateChart();
   }
 }
@@ -101,7 +101,7 @@ function countGender(userList) {
 
   FB.api('?ids='+queryStr+'&fields=gender', function (response) {
     console.log(response);
-    
+
     attendingIds.forEach(function (value, index) {
 
       if (response[value].gender === 'male') {
