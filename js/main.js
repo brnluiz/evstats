@@ -47,7 +47,9 @@ var ChartBox = function (boxId) {
     });
 
     this.element.values = values;
-    this.element.updateChart(data);
+    console.log(data);
+    console.log(this.elements.values);
+    this.element.updateChart();
   }
 }
 
@@ -98,7 +100,8 @@ function countGender(userList) {
   queryStr = queryStr.substring(1);
 
   FB.api('?ids='+queryStr+'&fields=gender', function (response) {
-
+    console.log(response);
+    
     attendingIds.forEach(function (value, index) {
 
       if (response[value].gender === 'male') {

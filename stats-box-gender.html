@@ -89,10 +89,11 @@
             percentual: this.percentual[i]
             });
         }, this);
+        console.log(this.values);
+        console.log(this.data);
       },
       updateLegend: function () {
         this.legendData.model = this.data;
-        console.log(this.legendData.model);
       },
       updateChart: function () {
         var objIdx = 0, tempValues = [];
