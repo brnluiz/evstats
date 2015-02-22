@@ -34,6 +34,9 @@ var ChartBox = function (boxId) {
   this.setName = function (name) {
     this.element.chartName = name;
   }
+  this.setTotalSize = function (size) {
+    this.element.total = size;
+  }
   this.updateChart = function (data) {
     var values = [];
     var objIdx = 0;
@@ -106,7 +109,7 @@ function countGender(userList) {
         eventStats.genders.other++;
       }
     });
-
+    chartGender.setTotalSize(eventStats.total);
     chartGender.updateChart(eventStats.genders);
   });
 }
@@ -137,7 +140,7 @@ function getEventStats(eventId) {
           var eventCounts    = JSON.parse(response[2].body);
 
           eventStats.name = eventInfo.name;
-          eventStats.total = eventCounts.attending_count;
+          eventStats.total = eventUsersList.length;
 
           eventStats.rsvp.attending = eventCounts.attending_count;
           eventStats.rsvp.declined  = eventCounts.declined_count;

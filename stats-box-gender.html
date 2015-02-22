@@ -55,9 +55,9 @@
             </div>
           </template>
         </core-list> -->
-        <div flex><div class="colorBox" style="background: {{colors[0]}}"></div>{{labels[0]}}: {{values[0]}}</div>
-        <div flex><div class="colorBox" style="background: {{colors[1]}}"></div>{{labels[1]}}: {{values[1]}}</div>
-        <div flex><div class="colorBox" style="background: {{colors[2]}}"></div>{{labels[2]}}: {{values[2]}}</div>
+        <div flex><div class="colorBox" style="background: {{colors[0]}}"></div>{{labels[0]}}: {{ percentual[0] }}% ({{values[0]}})</div>
+        <div flex><div class="colorBox" style="background: {{colors[1]}}"></div>{{labels[1]}}: {{ percentual[1] }}% ({{values[1]}})</div>
+        <div flex><div class="colorBox" style="background: {{colors[2]}}"></div>{{labels[2]}}: {{ percentual[2] }}% ({{values[2]}})</div>
       </div>
     </article>
   </template>
@@ -69,6 +69,8 @@
       colors: ['#517AE6', '#E66C51', '#3D414D'],
       labels: ['Men', 'Women', 'Other'],
       values: [20, 30, 40],
+      percentual: [0, 0, 0],
+      total: 0,
       data: [],
       chartName: "Hello World",
       legendData: {
@@ -78,10 +80,14 @@
       },
       populateData: function () {
         this.values.forEach(function (val, i) {
+          this.percentual[i] = (val/this.total * 100).toFixed(2);
+
           this.data.push({
             color: this.colors[i],
             value: val,
-            label: this.labels[i] });
+            label: this.labels[i] ,
+            percentual: this.percentual[i]
+            });
         }, this);
       },
       updateLegend: function () {
